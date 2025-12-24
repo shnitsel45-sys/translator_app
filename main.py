@@ -15,12 +15,13 @@ class AdvancedTransformationalTranslator:
             import stanza
             self.MORPH_AVAILABLE = True
             self.STANZA_AVAILABLE = True
-            print("✅ Все лингвистические анализаторы доступны")
+            print("Все лингвистические анализаторы доступны")
         except ImportError as e:
-            print(f"⚠️ Не все анализаторы установлены: {e}")
+            print(f"Не все анализаторы установлены: {e}")
             self.MORPH_AVAILABLE = False
             self.STANZA_AVAILABLE = False
 
+        # Для перевода отдельных слов (вместо словаря)
         self.translator = GoogleTranslator(source='ru', target='en')
         self.translation_cache = {}
 
@@ -51,9 +52,9 @@ class AdvancedTransformationalTranslator:
             try:
                 import pymorphy2
                 self.morph = pymorphy2.MorphAnalyzer()
-                print("✅ Морфологический анализатор инициализирован")
+                print("Морфологический анализатор инициализирован")
             except Exception as e:
-                print(f"❌ Ошибка инициализации pymorphy2: {e}")
+                print(f"Ошибка инициализации pymorphy2: {e}")
                 self.MORPH_AVAILABLE = False
 
         if self.STANZA_AVAILABLE:
@@ -61,18 +62,18 @@ class AdvancedTransformationalTranslator:
                 import stanza
                 try:
                     self.stanza_nlp = stanza.Pipeline('ru', processors='tokenize,pos,lemma,depparse')
-                    print("✅ Stanza синтаксический анализатор инициализирован")
+                    print("Stanza инициализирован")
                 except:
-                    print("📥 Скачиваем модель Stanza для русского языка...")
+                    print("Скачиваем модель Stanza для русского языка...")
                     stanza.download('ru')
                     self.stanza_nlp = stanza.Pipeline('ru', processors='tokenize,pos,lemma,depparse')
-                    print("✅ Stanza синтаксический анализатор инициализирован")
+                    print("Stanza инициализирован")
             except Exception as e:
-                print(f"❌ Ошибка инициализации Stanza: {e}")
+                print(f"Ошибка инициализации Stanza: {e}")
                 self.STANZA_AVAILABLE = False
 
         if self.is_json_loaded_properly():
-            print("✅ Файл JSON успешно загружен! Используются правила из файла.")
+            print("Файл JSON загружен!")
             self.json_loaded = True
             self.patterns = self.grammar_rules["english_grammar_system"]["sentence_patterns"]["basic_clause_patterns"]
             self.extended_patterns = self.grammar_rules["english_grammar_system"]["sentence_patterns"][
@@ -80,7 +81,7 @@ class AdvancedTransformationalTranslator:
             self.lexical_corrections = self.grammar_rules["english_grammar_system"].get("lexical_corrections", {})
             self.preposition_rules = self.grammar_rules["english_grammar_system"].get("preposition_rules", {})
         else:
-            print("⚠️ Файл JSON не загружен. Используются встроенные правила.")
+            print("Файл JSON не загружен.")
             self.json_loaded = False
             self.patterns = {}
             self.extended_patterns = {}
@@ -97,13 +98,13 @@ class AdvancedTransformationalTranslator:
         for json_file in json_files:
             try:
                 if os.path.exists(json_file):
-                    print(f"🔍 Найден файл: {json_file}")
+                    print(f"Найден файл: {json_file}")
                     with open(json_file, 'r', encoding='utf-8') as f:
                         rules = json.load(f)
-                        print(f"✅ Файл {json_file} успешно загружен")
+                        print(f"Файл {json_file} успешно загружен")
                         return rules
             except Exception as e:
-                print(f"❌ Ошибка при загрузке {json_file}: {e}")
+                print(f"Ошибка при загрузке {json_file}: {e}")
         return {"error": "No JSON file found"}
 
     def stanza_syntax_analysis(self, sentence: str) -> Dict:
@@ -349,18 +350,18 @@ class AdvancedTransformationalTranslator:
         """Определяет артикль для слова"""
         word_lower = word_ru.lower()
 
-        # Неисчисляемые существительные — без артикля
+        # Неисчисляемые существительные без артикля
         uncountable = {"чай", "кофе", "молоко", "вода", "дома", "работы"}
         if word_lower in uncountable:
             return ""
 
-        # После предлогов — всегда "the" для конкретных мест
+        # После предлогов всегда "the" для конкретных мест
         if self.preposition_rules:
             specific_places = self.preposition_rules.get("article_after_preposition", {}).get("specific_places", [])
             if any(place in word_lower for place in ["парк", "офис", "сад", "деревн", "стол", "библиотек"]):
                 return "the"
 
-        # Исчисляемые существительные — "a"
+        # Исчисляемые существительные: "a"
         if word_lower in ["дом", "книга", "газета", "собака", "яблоко", "папа", "мама"]:
             return "a"
 
@@ -819,13 +820,14 @@ def demonstrate_stanza_translator():
     print("ДЕМОНСТРАЦИЯ: ОБНОВЛЕННЫЙ ПЕРЕВОДЧИК")
     print("=" * 70)
     for i, sentence in enumerate(test_sentences, 1):
-        print(f"\n{i}. 📝 РУССКИЙ: {sentence}")
+        print(f"\n{i}.РУССКИЙ: {sentence}")
         result = translator.translate_with_analysis(sentence)
-        print(f"   🌐 АНГЛИЙСКИЙ: {result['translation']}")
-        print(f"   🔤 Переводы слов: {result['word_translations']}")
-        print(f"   🏗️  Шаблон: {result['sentence_pattern']}")
+        print(f"АНГЛИЙСКИЙ: {result['translation']}")
+        print(f"Переводы слов: {result['word_translations']}")
+        print(f"Шаблон: {result['sentence_pattern']}")
         print("-" * 70)
 
 
 if __name__ == "__main__":
+
     demonstrate_stanza_translator()
