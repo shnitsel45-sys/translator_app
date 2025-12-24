@@ -47,9 +47,9 @@ class TranslationApp:
                 examples_data = json.load(f)
                 if 'examples' in examples_data:
                     self.examples = examples_data['examples']
-                    print("✅ Примеры загружены из файла translation_examples.json")
+                    print("Примеры загружены из файла translation_examples.json")
         except Exception as e:
-            print(f"⚠️ Не удалось загрузить примеры из файла: {e}")
+            print(f"Не удалось загрузить примеры из файла: {e}")
 
     def setup_ui(self):
         """Настройка пользовательского интерфейса"""
@@ -281,14 +281,14 @@ class TranslationApp:
         try:
             from main import AdvancedTransformationalTranslator
             self.translator = AdvancedTransformationalTranslator()
-            self.status_var.set("✅ Трансформационный переводчик готов")
+            self.status_var.set("Трансформационный переводчик готов")
             self.update_rules_display()
         except ImportError as e:
-            self.status_var.set(f"❌ Ошибка загрузки переводчика: {e}")
+            self.status_var.set(f"Ошибка загрузки переводчика: {e}")
             messagebox.showerror("Ошибка",
                                  "Не удалось загрузить переводчика. Убедитесь, что main.py находится в той же папке.")
         except Exception as e:
-            self.status_var.set(f"❌ Ошибка инициализации: {e}")
+            self.status_var.set(f"Ошибка инициализации: {e}")
             import traceback
             traceback.print_exc()
 
@@ -304,44 +304,44 @@ class TranslationApp:
                 # Отображаем информацию о версии
                 if "metadata" in rules["english_grammar_system"]:
                     metadata = rules["english_grammar_system"]["metadata"]
-                    self.rules_text.insert(tk.END, f"📚 Система правил: {metadata.get('description', 'Неизвестно')}\n")
-                    self.rules_text.insert(tk.END, f"🔖 Версия: {metadata.get('version', 'Неизвестно')}\n")
-                    self.rules_text.insert(tk.END, f"📅 Обновлено: {metadata.get('last_updated', 'Неизвестно')}\n\n")
+                    self.rules_text.insert(tk.END, f"Система правил: {metadata.get('description', 'Неизвестно')}\n")
+                    self.rules_text.insert(tk.END, f"Версия: {metadata.get('version', 'Неизвестно')}\n")
+                    self.rules_text.insert(tk.END, f"Обновлено: {metadata.get('last_updated', 'Неизвестно')}\n\n")
 
                 # Отображаем основные шаблоны
-                self.rules_text.insert(tk.END, "📝 ОСНОВНЫЕ СИНТАКСИЧЕСКИЕ ШАБЛОНЫ:\n")
+                self.rules_text.insert(tk.END, "ОСНОВНЫЕ СИНТАКСИЧЕСКИЕ ШАБЛОНЫ:\n")
                 self.rules_text.insert(tk.END, "=" * 50 + "\n\n")
 
                 patterns = rules["english_grammar_system"]["sentence_patterns"]["basic_clause_patterns"]
                 for pattern_name, pattern_info in patterns.items():
-                    self.rules_text.insert(tk.END, f"🔹 {pattern_name}: {pattern_info['description']}\n")
+                    self.rules_text.insert(tk.END, f"{pattern_name}: {pattern_info['description']}\n")
                     self.rules_text.insert(tk.END, f"   Пример: {pattern_info['example']}\n\n")
 
                 # Отображаем специальные конструкции
-                self.rules_text.insert(tk.END, "\n⚙️ СПЕЦИАЛЬНЫЕ КОНСТРУКЦИИ:\n")
+                self.rules_text.insert(tk.END, "\nСПЕЦИАЛЬНЫЕ КОНСТРУКЦИИ:\n")
                 self.rules_text.insert(tk.END, "=" * 50 + "\n\n")
 
                 special_constructions = rules["english_grammar_system"]["special_constructions"]
                 for construction, details in special_constructions.items():
-                    self.rules_text.insert(tk.END, f"🔸 {construction.replace('_', ' ').title()}\n")
+                    self.rules_text.insert(tk.END, f"{construction.replace('_', ' ').title()}\n")
                     if isinstance(details, dict) and "examples" in details:
                         for example in details["examples"]:
                             self.rules_text.insert(tk.END, f"   • {example}\n")
                     self.rules_text.insert(tk.END, "\n")
 
-                self.rules_text.insert(tk.END, "\nℹ️ Правила загружены из файла transformational_grammar_rules.json")
-                self.status_var.set("✅ Правила перевода обновлены")
+                self.rules_text.insert(tk.END, "\nПравила загружены из файла transformational_grammar_rules.json")
+                self.status_var.set("Правила перевода обновлены")
             else:
-                self.rules_text.insert(tk.END, "⚠️ Правила перевода не загружены.\n\n")
+                self.rules_text.insert(tk.END, "Правила перевода не загружены.\n\n")
                 self.rules_text.insert(tk.END, "Возможные причины:\n")
                 self.rules_text.insert(tk.END, "1. Файл transformational_grammar_rules.json не найден\n")
                 self.rules_text.insert(tk.END, "2. Файл содержит ошибки форматирования\n")
                 self.rules_text.insert(tk.END, "3. Структура файла не соответствует ожидаемой\n\n")
                 self.rules_text.insert(tk.END, "Будут использоваться встроенные базовые правила перевода.")
-                self.status_var.set("⚠️ Используются встроенные правила перевода")
+                self.status_var.set("Используются встроенные правила перевода")
         except Exception as e:
-            self.rules_text.insert(tk.END, f"❌ Ошибка при загрузке правил:\n{str(e)}")
-            self.status_var.set(f"❌ Ошибка отображения правил: {e}")
+            self.rules_text.insert(tk.END, f"Ошибка при загрузке правил:\n{str(e)}")
+            self.status_var.set(f"Ошибка отображения правил: {e}")
 
         self.rules_text.config(state='disabled')
 
@@ -362,7 +362,7 @@ class TranslationApp:
         # Показываем прогресс
         self.progress.pack(side='bottom', fill='x', padx=20, pady=5)
         self.progress.start(10)
-        self.status_var.set("🔄 Перевожу и анализирую...")
+        self.status_var.set("Перевожу и анализирую...")
 
         # Очищаем поля
         for widget in [self.output_text, self.translation_details, self.tree_text_ru,
@@ -405,7 +405,7 @@ class TranslationApp:
                 }
             else:
                 result_display = {
-                    'translation': "❌ Ошибка: Переводчик не загружен",
+                    'translation': "Ошибка: Переводчик не загружен",
                     'details': "",
                     'analysis': "",
                     'structure': "",
@@ -416,7 +416,7 @@ class TranslationApp:
             import traceback
             error_trace = traceback.format_exc()
             result_display = {
-                'translation': f"❌ Ошибка перевода: {str(e)}",
+                'translation': f"Ошибка перевода: {str(e)}",
                 'details': f"Текст ошибки:\n{error_trace}",
                 'analysis': "",
                 'structure': "",
@@ -470,9 +470,9 @@ class TranslationApp:
         self.transforms_text.config(state='disabled')
 
         if result['error']:
-            self.status_var.set(f"❌ Ошибка перевода: {result['error']}")
+            self.status_var.set(f"Ошибка перевода: {result['error']}")
         else:
-            self.status_var.set(f"✅ Перевод завершен | Шаблон: {result.get('pattern', 'Неизвестен')}")
+            self.status_var.set(f"Перевод завершен | Шаблон: {result.get('pattern', 'Неизвестен')}")
 
     def _format_translation_details(self, result):
         """Форматирование деталей перевода"""
@@ -480,14 +480,14 @@ class TranslationApp:
         details.append("=" * 60)
         details.append("ДЕТАЛИ ПЕРЕВОДА")
         details.append("=" * 60)
-        details.append(f"📝 Исходное предложение: {result['original']}")
-        details.append(f"🌐 Перевод: {result['translation']}")
-        details.append(f"📊 Источник правил: {result['rules_source']}")
+        details.append(f"Исходное предложение: {result['original']}")
+        details.append(f"Перевод: {result['translation']}")
+        details.append(f"Источник правил: {result['rules_source']}")
         details.append("")
 
         if "sentence_structure" in result:
             structure = result["sentence_structure"]
-            details.append("🏗️ Структура предложения:")
+            details.append("Структура предложения:")
             details.append(f"   Подлежащее (Subject): {structure.get('subject', 'Не найдено')}")
             details.append(f"   Сказуемое (Verb): {structure.get('verb', 'Не найдено')}")
             details.append(f"   Прямое дополнение (Object): {structure.get('object', 'Не найдено')}")
@@ -496,7 +496,7 @@ class TranslationApp:
             if structure.get('question_word'):
                 details.append(f"   Вопросительное слово: {structure['question_word']}")
 
-        details.append("\n🔤 Словарный перевод слов:")
+        details.append("\nСловарный перевод слов:")
         for word_ru, word_en in result["word_translations"].items():
             details.append(f"   {word_ru} → {word_en}")
 
@@ -532,7 +532,7 @@ class TranslationApp:
                         word.get("deprel", "")
                     ))
         else:
-            analysis_lines.append("\nℹ️ Детальный синтаксический анализ недоступен.")
+            analysis_lines.append("\nДетальный синтаксический анализ недоступен.")
             analysis_lines.append("Возможно, Stanza анализатор не был инициализирован.")
 
         return "\n".join(analysis_lines)
@@ -547,27 +547,27 @@ class TranslationApp:
         if "sentence_structure" in result:
             structure = result["sentence_structure"]
 
-            structure_lines.append(f"\n🔤 Тип предложения: {result.get('sentence_type', 'Не определен').capitalize()}")
-            structure_lines.append(f"📋 Использованный шаблон: {result.get('sentence_pattern', 'Не определен')}")
+            structure_lines.append(f"\nТип предложения: {result.get('sentence_type', 'Не определен').capitalize()}")
+            structure_lines.append(f"Использованный шаблон: {result.get('sentence_pattern', 'Не определен')}")
 
             # Подлежащее
             subject = structure.get("subject")
             if subject:
-                structure_lines.append(f"\n👤 Подлежащее (Subject): '{subject}'")
+                structure_lines.append(f"\nПодлежащее (Subject): '{subject}'")
                 if subject.lower() in ["он", "она", "оно"]:
                     structure_lines.append("   └── Третье лицо единственного числа")
 
             # Глагол
             verb = structure.get("verb")
             if verb:
-                structure_lines.append(f"\n💬 Глагол (Verb): '{verb}'")
+                structure_lines.append(f"\nГлагол (Verb): '{verb}'")
                 tense = result.get("verb_tense", "Не определено")
                 structure_lines.append(f"   └── Время: {tense}")
 
             # Прямое дополнение
             obj = structure.get("object")
             if obj:
-                structure_lines.append(f"\n🎯 Прямое дополнение (Object): '{obj}'")
+                structure_lines.append(f"\nПрямое дополнение (Object): '{obj}'")
                 article = result.get("article")
                 if article:
                     structure_lines.append(f"   └── Артикль: '{article}'")
@@ -575,14 +575,14 @@ class TranslationApp:
             # Косвенное дополнение
             indirect_obj = structure.get("indirect_object")
             if indirect_obj:
-                structure_lines.append(f"\n🔗 Косвенное дополнение (Indirect Object): '{indirect_obj}'")
+                structure_lines.append(f"\nКосвенное дополнение (Indirect Object): '{indirect_obj}'")
 
             # Вопросительное слово
             question_word = structure.get("question_word")
             if question_word:
-                structure_lines.append(f"\n❓ Вопросительное слово: '{question_word}'")
+                structure_lines.append(f"\nВопросительное слово: '{question_word}'")
         else:
-            structure_lines.append("\nℹ️ Структурный анализ недоступен.")
+            structure_lines.append("\nСтруктурный анализ недоступен.")
 
         return "\n".join(structure_lines)
 
@@ -593,22 +593,22 @@ class TranslationApp:
         transform_lines.append("=" * 40)
 
         if "syntax_transformations" in result and result["syntax_transformations"]:
-            transform_lines.append("\n🔄 Выполненные грамматические трансформации:")
+            transform_lines.append("\nВыполненные грамматические трансформации:")
             for i, transform in enumerate(result["syntax_transformations"], 1):
                 transform_lines.append(f"{i}. {transform}")
         else:
-            transform_lines.append("\nℹ️ Специфические трансформации не применялись.")
+            transform_lines.append("\nСпецифические трансформации не применялись.")
 
         transform_lines.append("\n" + "-" * 40)
 
         # Добавляем информацию об использованных шаблонах
         if result.get('sentence_pattern') == "SVOO":
-            transform_lines.append("💡 Шаблон SVOO (Subject + Verb + Indirect Object + Direct Object):")
+            transform_lines.append("Шаблон SVOO (Subject + Verb + Indirect Object + Direct Object):")
             transform_lines.append("   Применяется для глаголов передачи (дать, сказать, показать и т.д.)")
             transform_lines.append("   Порядок: Подлежащее + Глагол + Косвенное дополнение + Прямое дополнение")
 
         elif result.get('sentence_pattern') == "SVOA":
-            transform_lines.append("💡 Шаблон SVOA (Subject + Verb + Object + Adverbial):")
+            transform_lines.append("Шаблон SVOA (Subject + Verb + Object + Adverbial):")
             transform_lines.append("   Применяется для предложений с обстоятельствами места/времени")
             transform_lines.append("   Обстоятельства всегда располагаются в конце предложения")
 
@@ -620,7 +620,7 @@ class TranslationApp:
         self.input_text.delete('1.0', tk.END)
         self.input_text.insert('1.0', example)
         self.translate_text()
-        self.status_var.set(f"🎲 Сгенерирован пример: '{example}'")
+        self.status_var.set(f"Сгенерирован пример: '{example}'")
 
     def clear_text(self):
         """Очистка полей ввода и вывода"""
@@ -630,7 +630,7 @@ class TranslationApp:
             widget.config(state='normal')
             widget.delete('1.0', tk.END)
             widget.config(state='disabled')
-        self.status_var.set("🧹 Поля очищены")
+        self.status_var.set("Поля очищены")
 
 
 def main():
@@ -640,7 +640,7 @@ def main():
         app = TranslationApp(root)
         root.mainloop()
     except Exception as e:
-        print(f"❌ Ошибка запуска приложения: {e}")
+        print(f"Ошибка запуска приложения: {e}")
         import traceback
         traceback.print_exc()
         input("Нажмите Enter для выхода...")
@@ -649,3 +649,4 @@ def main():
 if __name__ == "__main__":
 
     main()
+
