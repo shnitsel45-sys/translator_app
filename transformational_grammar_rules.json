@@ -1,0 +1,285 @@
+{
+  "english_grammar_system": {
+    "metadata": {
+      "version": "3.0",
+      "description": "Исполняемая система трансформационной грамматики для генерации английских предложений",
+      "source": "Based on comprehensive linguistic analysis",
+      "last_updated": "2025-11-29"
+    },
+
+    "clause_framework": {
+      "primary_classification": {
+        "by_independence": {
+          "independent": {
+            "definition": "Может стоять как отдельное предложение",
+            "subtypes": ["declarative", "interrogative", "imperative", "exclamative"]
+          },
+          "dependent": {
+            "definition": "Не может стоять отдельно, зависит от главной клаузы",
+            "subtypes": ["relative", "comparative", "content", "non_finite", "verbless"]
+          }
+        },
+        "by_speech_act": {
+          "declarative": "утверждение",
+          "interrogative": "вопрос",
+          "imperative": "приказ/просьба",
+          "exclamative": "восклицание"
+        },
+        "by_structure": {
+          "finite": "с личной формой глагола",
+          "non_finite": "с неличной формой глагола",
+          "verbless": "без глагола"
+        }
+      }
+    },
+
+    "sentence_patterns": {
+      "basic_clause_patterns": {
+        "SV": {
+          "example": "Birds fly.",
+          "description": "Subject + Intransitive Verb",
+          "template": "{subject} {verb}",
+          "components": ["subject", "verb"]
+        },
+        "SVO": {
+          "example": "She reads books.",
+          "description": "Subject + Transitive Verb + Direct Object",
+          "template": "{subject} {verb} {article}{object}",
+          "components": ["subject", "verb", "object"],
+          "post_processing": {
+            "article": "a/an for countable singular, the for specific"
+          }
+        },
+        "SVC": {
+          "example": "He is a doctor.",
+          "description": "Subject + Linking Verb + Subject Complement",
+          "template": "{subject} {verb} {article}{complement}",
+          "components": ["subject", "verb", "complement"]
+        },
+        "SVA": {
+          "example": "She lives in London.",
+          "description": "Subject + Verb + Adverbial",
+          "template": "{subject} {verb} {adverbial}",
+          "components": ["subject", "verb", "adverbial"]
+        },
+        "SVOO": {
+          "example": "I gave him a book.",
+          "description": "Subject + Verb + Indirect Object + Direct Object",
+          "template": "{subject} {verb} {indirect_object} {article}{object}",
+          "components": ["subject", "verb", "indirect_object", "object"],
+          "semantic_constraint": "Требует глаголов передачи: give, tell, show, send, offer"
+        },
+        "SVOC": {
+          "example": "They elected him president.",
+          "description": "Subject + Verb + Object + Object Complement",
+          "template": "{subject} {verb} {object} {complement}",
+          "components": ["subject", "verb", "object", "complement"]
+        },
+        "SVOA": {
+          "example": "She put the book on the table.",
+          "description": "Subject + Verb + Object + Adverbial",
+          "template": "{subject} {verb} {article}{object} {adverbial}",
+          "components": ["subject", "verb", "object", "adverbial"],
+          "post_processing": {
+            "adverbial": "place/time expressions at the end"
+          }
+        }
+      },
+
+      "extended_patterns": {
+        "POSSESSION": {
+          "example": "I have a house in the village.",
+          "description": "Конструкция 'У [субъект] есть [объект]'",
+          "trigger_regex": "(у\\s+(меня|тебя|него|нее|нас|вас|них)\\s+есть|есть\\s+у\\s+(меня|тебя|него|нее|нас|вас|них))",
+          "template": "{subject} {verb} {article}{object}{location}",
+          "components": ["subject", "object", "location"],
+          "subject_mapping": {
+            "я": {"subject": "I", "verb": "have"},
+            "ты": {"subject": "You", "verb": "have"},
+            "он": {"subject": "He", "verb": "has"},
+            "она": {"subject": "She", "verb": "has"},
+            "оно": {"subject": "It", "verb": "has"},
+            "мы": {"subject": "We", "verb": "have"},
+            "вы": {"subject": "You", "verb": "have"},
+            "они": {"subject": "They", "verb": "have"}
+          },
+          "post_processing": {
+            "article": "a/an for countable singular objects (house, book), no article for uncountable (coffee, water)",
+            "location": "after prepositions use 'in the [place]', 'on the [surface]'"
+          }
+        },
+        "PRICE_QUESTION": {
+          "example": "How much does coffee cost?",
+          "description": "Специальные вопросы о цене и количестве",
+          "trigger_regex": "сколько\\s+(стоит|стоят)",
+          "template": "{question_word} {auxiliary} {subject} {verb}?",
+          "components": ["object"],
+          "question_mapping": {
+            "uncountable": {"question_word": "How much", "auxiliary": "does", "subject": "{object}", "verb": "cost"},
+            "countable": {"question_word": "How many", "auxiliary": "do", "subject": "{object}", "verb": "cost"}
+          },
+          "post_processing": {
+            "object_type": "кофе, чай, молоко, вода → uncountable; яблоки, книги, собаки → countable"
+          }
+        },
+        "PHRASAL_VERB": {
+          "example": "I wait for you here.",
+          "description": "Фразовые глаголы с предлогами",
+          "trigger_verbs": ["ждать", "смотреть", "идти"],
+          "template": "{subject} {verb_phrase} {object}{location}",
+          "verb_mapping": {
+            "ждать": {"verb_phrase": "wait for"},
+            "смотреть": {"verb_phrase": "look at"},
+            "идти": {"verb_phrase": "go to"}
+          },
+          "components": ["subject", "verb", "object", "location"]
+        }
+      }
+    },
+
+    "special_constructions": {
+      "possession_construction": {
+        "russian_pattern": "У [субъект] есть [объект]",
+        "english_pattern": "[Subject] + have/has + [Object]",
+        "rules": {
+          "subject_mapping": {
+            "я": "I have",
+            "ты": "You have",
+            "он/она/оно": "He/She/It has",
+            "мы": "We have",
+            "вы": "You have",
+            "они": "They have"
+          },
+          "article": "a/an for singular, no article for uncountable"
+        },
+        "examples": [
+          "У меня есть дом. → I have a house.",
+          "У неё есть кофе. → She has coffee."
+        ]
+      },
+
+      "price_questions": {
+        "russian_pattern": "Сколько стоит/стоят [объект]?",
+        "english_pattern": "How much/many does/do [object] cost?",
+        "rules": {
+          "how_much": "for uncountable nouns (кофе, молоко, вода)",
+          "how_many": "for countable nouns (яблоки, книги, собаки)"
+        },
+        "examples": [
+          "Сколько стоит кофе? → How much does coffee cost?",
+          "Сколько стоят яблоки? → How many do apples cost?"
+        ]
+      },
+
+      "phrasal_verbs": {
+        "wait_for": {
+          "russian": "ждать [кого-то/что-то]",
+          "english": "wait for [someone/something]",
+          "examples": ["Я жду тебя. → I wait for you."]
+        },
+        "look_at": {
+          "russian": "смотреть на [что-то]",
+          "english": "look at [something]",
+          "examples": ["Он смотрит на дом. → He looks at the house."]
+        },
+        "go_to": {
+          "russian": "идти в/на [место]",
+          "english": "go to [place]",
+          "examples": ["Я иду в парк. → I go to the park."]
+        }
+      },
+
+      "complex_sentences": {
+        "temporal_clauses": {
+          "pattern": "Когда [придаточное], [главное]",
+          "english": "[Main clause] when [subordinate clause]",
+          "examples": [
+            "Когда я пришёл домой, мама готовила ужин. → Mother was cooking dinner when I came home."
+          ]
+        }
+      }
+    },
+
+    "independent_clauses": {
+      "interrogative": {
+        "open_questions": {
+          "price_questions": {
+            "structure": "How much/many + does/do + subject + cost?",
+            "description": "Специальные вопросы о цене и количестве",
+            "examples": [
+              "How much does coffee cost?",
+              "How many do apples cost?"
+            ],
+            "rules": {
+              "how_much": "для неисчисляемых существительных (кофе, молоко, вода)",
+              "how_many": "для исчисляемых существительных (яблоки, книги, собаки)"
+            }
+          }
+        }
+      }
+    },
+
+    "lexical_corrections": {
+      "common_nouns": {
+        "чай": "tea",
+        "кофе": "coffee",
+        "молоко": "milk",
+        "вода": "water",
+        "собака": "dog",
+        "книга": "book",
+        "стол": "table",
+        "дом": "house",
+        "парк": "park",
+        "офис": "office",
+        "сад": "garden",
+        "деревня": "village",
+        "ужин": "dinner",
+        "газета": "newspaper",
+        "яблоко": "apple",
+        "яблоки": "apples"
+      },
+      "verbs": {
+        "стоит": "costs",
+        "стоят": "cost",
+        "вижу": "see",
+        "пьёт": "drinks",
+        "готовила": "was cooking",
+        "кладу": "put",
+        "работает": "works",
+        "делает": "does",
+        "иду": "go",
+        "видит": "sees",
+        "жду": "wait for",
+        "начали": "started",
+        "читают": "read"
+      }
+    },
+
+    "preposition_rules": {
+      "location": {
+        "в/во": "in",
+        "на": "on",
+        "у": "at",
+        "с": "with",
+        "от": "from",
+        "к": "to",
+        "по": "on",
+        "о/об": "about",
+        "за": "for",
+        "из": "from",
+        "без": "without"
+      },
+      "article_after_preposition": {
+        "rule": "После предлога + существительное → использовать 'the' для конкретных мест",
+        "examples": [
+          "в библиотеке → in the library",
+          "в парке → in the park",
+          "в офисе → in the office",
+          "в деревне → in the village",
+          "на столе → on the table"
+        ],
+        "specific_places": ["library", "park", "office", "village", "table", "house", "school", "hospital"]
+      }
+    }
+  }
+}
